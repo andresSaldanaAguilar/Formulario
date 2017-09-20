@@ -3,10 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/ANDRES/Documents/GitHub/Form/Formulario/web/Consulta.jsp</file>
-            <file>file:/C:/Users/ANDRES/Documents/GitHub/Form/Formulario/src/java/Servlets/ConsultaServlet.java</file>
-            <file>file:/C:/Users/ANDRES/Documents/GitHub/Form/Formulario/src/java/DB/cConexion.java</file>
-            <file>file:/C:/Users/ANDRES/Documents/GitHub/Form/Formulario/src/java/java/bdConexion.java</file>
+            <file>file:/C:/Users/ANDRES/Documents/GitHub/Formulario/Formulario/web/index.jsp</file>
+            <file>file:/C:/Users/ANDRES/Documents/GitHub/Formulario/Formulario/src/java/DB/cConexion.java</file>
+            <file>file:/C:/Users/ANDRES/Documents/GitHub/Formulario/Formulario/src/java/DB/DBConexion.java</file>
         </group>
     </open-files>
 </project-private>

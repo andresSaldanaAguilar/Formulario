@@ -17,12 +17,7 @@ public class cConexion {
     private Connection conexion=null;
     private Statement statequieto=null;
     //Constructor que sirve para inicializar variables para cualquier base de datos
-    public cConexion(String driver, String url, String usuario, String contra){
-        Driver_BD=driver;
-        Url_BD=url;
-        Usuario_BD=usuario;
-        Contrasena_BD=contra;
-    }
+
     //Constructor que sirve para inicializar variables para cualquier Base de Datos en MySql
     public cConexion(){
         Driver_BD="com.mysql.jdbc.Driver";
@@ -35,7 +30,6 @@ public class cConexion {
         try {
             Class.forName(Driver_BD).newInstance();
             conexion = DriverManager.getConnection(Url_BD, Usuario_BD, Contrasena_BD);
-
         } 
         catch ( SQLException err) {
             System.out.println("Error " + err.getMessage());
@@ -55,7 +49,7 @@ public class cConexion {
    //Metodos para ejecutar sentencias SQL
     public ResultSet consulta(String consulta) throws SQLException{
         statequieto = (Statement) conexion.createStatement();
-        return statequieto.executeQuery("select * from usuario where curp='"+consulta+"';");
+        return statequieto.executeQuery(consulta);
     }
     public void actualizar(String actualiza) throws SQLException{
         statequieto = (Statement) conexion.createStatement();
@@ -69,5 +63,14 @@ public class cConexion {
     public void insertar(String inserta) throws SQLException{
         statequieto = (Statement) conexion.createStatement();
         statequieto.executeUpdate(inserta);
+    }
+    public static void main(String args[]){
+        cConexion bd=new cConexion();
+        bd.conectar();
+        try {
+            System.out.println(bd.consulta("select * from usuario where curp='A';"));
+        } catch (SQLException ex) {
+            Logger.getLogger(cConexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
