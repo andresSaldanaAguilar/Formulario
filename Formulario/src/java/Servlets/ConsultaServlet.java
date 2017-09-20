@@ -5,8 +5,7 @@
  */
 package Servlets;
 
-import DB.cConexion;
-import java.bdConexion;
+import DB.DBConexion;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
@@ -84,21 +83,31 @@ public class ConsultaServlet extends HttpServlet {
         //processRequest(request, response);        
         String pattern=request.getParameter("pattern");
         System.out.println("CURP:"+pattern);
-        cConexion con=new cConexion();
+        DBConexion con=new DBConexion();
         
         con.conectar();
-        try {
-            con.consulta(pattern);
-            ResultSet r=con.consulta(pattern);
-            if(r.first()){
-                    String correo=r.getString("Nombre");
-                    System.out.println(correo);
-                }
-        } catch (SQLException ex) {
-            Logger.getLogger(ConsultaServlet.class.getName()).log(Level.SEVERE, null, ex);
+
+            ResultSet resultados=con.consultar("select * from usuario where curp='"+pattern+"';");
+    
+            if (resultados != null) {
+              try {
+                  System.out.println("Nombre      Apellido_Paterno      Apellido_Materno"
+                          + "      CURP      Fecha_Nacimiento      Correo      Sexo_idSexo");
+                  System.out.println("--------------------------------");
+                  while (resultados.next()) {
+                      System.out.println(""+resultados.getString("Nombre")+"       "+resultados.getString("Apellido_Paterno")
+                      +"       "+resultados.getString("Apellido_Materno")+"       "+resultados.getString("CURP")+"       "+resultados.getString("Fecha_Nacimiento")
+                      +"       "+resultados.getString("Correo")+"       "+resultados.getBigDecimal("Sexo_idSexo")
+                      );
+                  }
+              } catch (Exception e) {
+                  e.printStackTrace();
+              }
+            }
         }
+
         
-    }
+    
     
    
     /**

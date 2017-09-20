@@ -5,7 +5,7 @@
  */
 package Servlets;
 
-import DB.cConexion;
+
 import java.io.IOException;
 //import java.io.PrintWriter;
 import java.sql.ResultSet;

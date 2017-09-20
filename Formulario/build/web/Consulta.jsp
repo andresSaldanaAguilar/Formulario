@@ -27,7 +27,7 @@
 	<div class="row">
 		<div class="form-group">
 		  <input type="text" class="form-control" id="pattern" name="pattern" placeholder="CURP" 
-                    pattern="[A-B]">
+                    pattern="[A-Z]">
 		</div>
 	</div>
 	<br><br>
