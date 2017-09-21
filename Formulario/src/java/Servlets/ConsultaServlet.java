@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -104,8 +105,24 @@ public class ConsultaServlet extends HttpServlet {
                   e.printStackTrace();
               }
             }
+            
+        if (resultados != null) {
+            try {
+                HttpSession sesion= request.getSession();
+                sesion.setAttribute("Nombre",resultados.getString("Nombre"));
+                sesion.setAttribute("Apellido_Paterno",resultados.getString("Apellido_Paterno"));
+                sesion.setAttribute("Apellido_Materno",resultados.getString("Apellido_Materno"));
+                sesion.setAttribute("CURP",resultados.getString("CURP"));
+                sesion.setAttribute("Fecha_Nacimiento",resultados.getString("Fecha_Nacimiento"));
+                sesion.setAttribute("Correo",resultados.getString("Correo"));
+                sesion.setAttribute("Sexo_idSexo",resultados.getBigDecimal("Sexo_idSexo"));            
+                System.out.println("banderini");
+        } catch (Exception e) {
+                  e.printStackTrace();
+              }
         }
-
+        response.sendRedirect("Resultado.jsp");
+    }
         
     
     

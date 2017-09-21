@@ -22,8 +22,13 @@
 	
 	  <legend><h1>Datos obtenidos</h1></legend>
 	  <h4 style="padding-bottom:10%;">Usuario registrado con la CURP:</h4>
-		<p>Nombre(s):</p> <label><% //traemos los datos de db%></label>
-		<p>Apellidos:</p> <label><% //traemos los datos de db%></label>
+		
+                <%
+
+                HttpSession sesion= request.getSession();
+                String nombre=(String)sesion.getAttribute("Nombre");%>
+                <p>Nombre(s):</p> <label><%=nombre%></label>
+		<p>Apellidos:</p>
 		<p>Fecha de nacimiento:</p> <label><% //traemos los datos de db%></label>
 		<p>Correo Electronico:</p> <label><% //traemos los datos de db%></label>
 		<p>Sexo:</p>
