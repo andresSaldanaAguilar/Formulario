@@ -14,31 +14,35 @@
   <link rel="stylesheet" href="Resources/bootstrap-3.3.7-dist/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="Resources/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
 <body style="background-color:#D8D8D8">
 
 <div class="container" style="padding:5% 20%;">
-	
-	  <legend><h1>Datos obtenidos</h1></legend>
-	  <h4 style="padding-bottom:10%;">Usuario registrado con la CURP:</h4>
-		
-                <%
+    
+    <div class="panel panel-default">
+        <div class="panel-heading">
+                <legend><h1>Datos obtenidos</h1></legend>
+                <h4>Usuario registrado con la CURP: <%=(String)request.getAttribute("CURP")%></h4>
+        </div>
+        <div class="panel-body">
+            <p><label>Nombre(s):</label><text> <%=(String)request.getAttribute("Nombre")%></text></p>
+            <p><label>Apellidos:</label><text> <%=(String)request.getAttribute("Apellido_Paterno")%>  <%=(String)request.getAttribute("Apellido_Materno")%></text></p>
+            <p><label>Fecha de nacimiento:</label><text> <%=(String)request.getAttribute("Fecha_Nacimiento")%></text></p>
+            <p><label>Correo Electronico:</label><text> <%=(String)request.getAttribute("Correo")%></text></p>
+            
+            <%if(request.getAttribute("Sexo_idSexo").toString().equals("0")){%>
+            <p><label>Sexo:</label><text> Masculino</text></p>
+            <%}else{%>
+            <p><label>Sexo:</label><text> Femenino</text></p>
+            <%}%>
+            
+        </div>    
+    </div>
+    <a class="btn  btn-danger col-md-offset-5 col-md-2" href="Consulta.jsp">Regresar</a>
 
-                HttpSession sesion= request.getSession();
-                String nombre=(String)sesion.getAttribute("Nombre");%>
-                <p>Nombre(s):</p> <label><%=nombre%></label>
-		<p>Apellidos:</p>
-		<p>Fecha de nacimiento:</p> <label><% //traemos los datos de db%></label>
-		<p>Correo Electronico:</p> <label><% //traemos los datos de db%></label>
-		<p>Sexo:</p>
-	<br>
-	<br>
-	<div class="row">
-		<div class="col-md-offset-4 col-md-4 col-md-offset-4">
-			<button type="submit" class="btn btn-lg btn-primary">Regresar</button>
-		</div>
-	</div>
+
+    </div>
 </div>
 </body>
 </html>

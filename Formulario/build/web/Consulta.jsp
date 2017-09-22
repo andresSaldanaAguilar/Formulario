@@ -19,25 +19,24 @@
 <body style="background-color:#D8D8D8">
 
 <div class="container" style="padding:5% 20%;">
-	
-	  <legend><h1>Consulta de usuario</h1></legend>
-	  <h4 style="padding-bottom:10%;">Ingrese la CURP del usuario que desea  buscar:</h4>
-
-    <form action="ConsultaServlet" method="post">
-	<div class="row">
-		<div class="form-group">
-		  <input type="text" class="form-control" id="pattern" name="pattern" placeholder="CURP" 
-                    pattern="[A-Z]">
-		</div>
-	</div>
-	<br><br>
-	<div class="row">
-		<div class="col-md-offset-4 col-md-4 col-md-offset-4">
-			<button type="submit" class="btn btn-lg btn-primary">Consultar</button>
-		</div>
-	</div>
-
-    </form>
+    
+    
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <legend><h1>Consulta de usuario</h1></legend>
+	    <h4>Ingrese la CURP del usuario que desea  buscar:</h4>
+        </div>
+        <div class="panel-body">
+            <form action="ConsultaServlet" method="post">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="CURP" name="CURP" placeholder="CURP" required>
+                </div>
+                <button type="submit" class="btn  btn-primary col-md-offset-4 col-md-4 ">Consultar</button>
+            </form>
+        </div>
+    </div>
+    <br>
+        <a class="btn  btn-danger col-md-2" href="index.jsp">Regresar</a>
 </div>
 </body>
 </html>

@@ -81,52 +81,41 @@ public class ConsultaServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);        
-        String pattern=request.getParameter("pattern");
-        System.out.println("CURP:"+pattern);
-        DBConexion con=new DBConexion();
         
+        //Conseguimos el parametro del jsp        
+        String curp=request.getParameter("CURP");
+        System.out.println("CURP del usuario:"+curp);
+        
+        //realizamos la consulta a la base de datos
+        DBConexion con=new DBConexion();      
         con.conectar();
+        ResultSet resultados=con.consultar("select * from usuario where curp='"+curp+"';");
 
-            ResultSet resultados=con.consultar("select * from usuario where curp='"+pattern+"';");
-    
-            if (resultados != null) {
-              try {
-                  System.out.println("Nombre      Apellido_Paterno      Apellido_Materno"
-                          + "      CURP      Fecha_Nacimiento      Correo      Sexo_idSexo");
-                  System.out.println("--------------------------------");
-                  while (resultados.next()) {
-                      System.out.println(""+resultados.getString("Nombre")+"       "+resultados.getString("Apellido_Paterno")
-                      +"       "+resultados.getString("Apellido_Materno")+"       "+resultados.getString("CURP")+"       "+resultados.getString("Fecha_Nacimiento")
-                      +"       "+resultados.getString("Correo")+"       "+resultados.getBigDecimal("Sexo_idSexo")
-                      );
-                  }
-              } catch (Exception e) {
-                  e.printStackTrace();
-              }
-            }
-            
+        //conseguimos los datos y los mandamos al jsp    
         if (resultados != null) {
             try {
-                HttpSession sesion= request.getSession();
-                sesion.setAttribute("Nombre",resultados.getString("Nombre"));
-                sesion.setAttribute("Apellido_Paterno",resultados.getString("Apellido_Paterno"));
-                sesion.setAttribute("Apellido_Materno",resultados.getString("Apellido_Materno"));
-                sesion.setAttribute("CURP",resultados.getString("CURP"));
-                sesion.setAttribute("Fecha_Nacimiento",resultados.getString("Fecha_Nacimiento"));
-                sesion.setAttribute("Correo",resultados.getString("Correo"));
-                sesion.setAttribute("Sexo_idSexo",resultados.getBigDecimal("Sexo_idSexo"));            
-                System.out.println("banderini");
-        } catch (Exception e) {
+                while (resultados.next()) {
+                    response.setContentType("text/html");
+                    request.setAttribute("Nombre",resultados.getString("Nombre"));
+                    request.setAttribute("Apellido_Paterno",resultados.getString("Apellido_Paterno"));
+                    request.setAttribute("Apellido_Materno",resultados.getString("Apellido_Materno"));
+                    request.setAttribute("CURP",resultados.getString("CURP"));
+                    request.setAttribute("Fecha_Nacimiento",resultados.getString("Fecha_Nacimiento"));
+                    request.setAttribute("Correo",resultados.getString("Correo"));
+                    request.setAttribute("Sexo_idSexo",resultados.getBigDecimal("Sexo_idSexo"));
+                    request.getRequestDispatcher("Resultado.jsp").forward(request, response);
+                    }
+                } catch (SQLException e) {
                   e.printStackTrace();
-              }
+            }
+            
         }
-        response.sendRedirect("Resultado.jsp");
+        else{
+            System.out.println("Sin resultados");          
+        }
+        request.getRequestDispatcher("Consulta.jsp").forward(request, response);
     }
-        
-    
-    
-   
+
     /**
      * Returns a short description of the servlet.
      *

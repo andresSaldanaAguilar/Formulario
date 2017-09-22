@@ -13,20 +13,21 @@
 <body style="background-color:#D8D8D8">
 
 <div class="container" style="padding:5% 20%;">
-	
-	  <legend><h1>Sistema de registro y consulta</h1></legend>
-	  <h4 style="padding-bottom:10%;">Selecciona opcion para continuar:</h4>
-
-	<div class="row">
+    
+	<legend><h1>Sistema de registro y consulta</h1></legend>
+	<h4 style="padding-bottom:10%;">Selecciona opcion para continuar:</h4>
+        <form action="CargaServlet" method="post">
+            <div class="row">
 		<div class="col-md-offset-4 col-md-4 col-md-offset-4">
-			<a type="submit" class="btn btn-lg btn-primary" href="Registro.jsp" >Registrar Usuario</a>
+                    <button type="submit" class="btn btn-lg btn-primary">Registrar Usuario</button>
 		</div>
-	</div>
+            </div>
+        </form>
 	<br>
 	<br>
 	<div class="row">
 		<div class="col-md-offset-4 col-md-4 col-md-offset-4">
-			<a type="submit" class="btn btn-lg btn-primary" href="Consulta.jsp">Consultar Usuario</a>
+                    <a type="submit" class="btn btn-lg btn-primary" href="Consulta.jsp">Consultar Usuario</a>
 		</div>
 	</div>
 </div>
