@@ -25,6 +25,17 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class RegistroServlet extends HttpServlet {
 
+    private static final String C =
+        "ˆ[A-Z]{1}[AEIOU]{1}]A-Z]{2}[0-9]{2}(0[1-9]—1[0-2])" 
+        + "(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}"
+                + "(AS|BC|BS|CC|CS|CH|CL|CM|DFT|DG|G|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)"
+                + "[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$";
+    
+    private Pattern pC = Pattern.compile(C);
+    private static final String NOM = "[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2-48}";
+    private Pattern pNOM = Pattern.compile(NOM);
+    private static final String EM = "^[_a-z0-9-]+(.[_a-z0-9-]+)@[a-z0-9-]+(.[a-z0-9]+)*(.[a-z]{2,4})$";
+    private Pattern pEM = Pattern.compile(EM);
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -107,20 +118,54 @@ public class RegistroServlet extends HttpServlet {
         String f_nac=request.getParameter("f_nac");
         String email=request.getParameter("email");
         String idSexo=request.getParameter("idSexo");
-
-        //realizamos la consulta a la base de datos
-        DBConexion con=new DBConexion();      
-        con.conectar();
-        //realizamos insert
-        boolean resultados=con.ejecutar("insert into usuario values"
-                + "('"+nombre+"','"+apaterno+"','"+amaterno+"','"+curp+"',"
-                + "'"+f_nac+"','"+email+"','"+Integer.parseInt(idSexo)+"');");
-        if(resultados==true){
-            System.out.println("Registro Exitoso.");
-            request.getRequestDispatcher("index.jsp").forward(request, response);
-        }else{
-            System.out.println("No se pudo registrar.");
-            request.getRequestDispatcher("Registro.jsp").forward(request, response);
+        CURP = request.getParameter("CURP");
+        //Matchers para las regexes
+        Matcher m_curp = pC.matcher(curp);
+        Matcher m_nom = pNOM.matcher(nombre);
+        Matcher m_ap = pNOM.matcher(apaterno);
+        Matcher m_am = pNOM.matcher(amaterno);
+        Matcher m_email = pEM.matcher(email);
+        if (!m_curp.find( )) //Si no hay un match con el CURP
+        {
+            request.setAttribute("mensaje", "La CURP ingresada no es válida");
+            request.getRequestDispatcher("/WEB-INF/Registro.jsp").forward(request, response);
+        }
+        else if (!m_nom.find( )) //Si no hay un match con el nombre
+        {
+            request.setAttribute("mensaje", "El nombre ingresado no es válido");
+            request.getRequestDispatcher("/WEB-INF/Registro.jsp").forward(request, response);
+        }
+        else if (!m_ap.find( ))//Si no hay un match con el apellido paterno
+        {
+            request.setAttribute("mensaje", "El apellido paterno ingresado no es válido");
+            request.getRequestDispatcher("/WEB-INF/Registro.jsp").forward(request, response);
+        }
+        else if (!m_am.find( )) //Si no hay un match con el apellido materno
+        {
+            request.setAttribute("mensaje", "El apellido materno ingresado no es válido");
+            request.getRequestDispatcher("/WEB-INF/Registro.jsp").forward(request, response);
+        }
+        else if (!m_email.find( )) //Si no hay un match con el email
+        {
+            request.setAttribute("mensaje", "El email ingresado no es válido");
+            request.getRequestDispatcher("/WEB-INF/Registro.jsp").forward(request, response);
+        }
+        else //Si todo sale bien
+        {
+            //realizamos la consulta a la base de datos
+            DBConexion con=new DBConexion();      
+            con.conectar();
+            //realizamos insert
+            boolean resultados=con.ejecutar("insert into usuario values"
+                    + "('"+nombre+"','"+apaterno+"','"+amaterno+"','"+curp+"',"
+                    + "'"+f_nac+"','"+email+"','"+Integer.parseInt(idSexo)+"');");
+            if(resultados==true){
+                System.out.println("Registro Exitoso.");
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+            }else{
+                System.out.println("No se pudo registrar.");
+                request.getRequestDispatcher("Registro.jsp").forward(request, response);
+            }
         }
     }
 

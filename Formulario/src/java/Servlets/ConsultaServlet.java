@@ -35,6 +35,12 @@ public class ConsultaServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    private static final String C =
+        "ˆ[A-Z]{1}[AEIOU]{1}]A-Z]{2}[0-9]{2}(0[1-9]—1[0-2])" 
+        + "(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}"
+                + "(AS|BC|BS|CC|CS|CH|CL|CM|DFT|DG|G|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)"
+                + "[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$";
+    private Pattern pC = Pattern.compile(C);
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -85,35 +91,44 @@ public class ConsultaServlet extends HttpServlet {
         //Conseguimos el parametro del jsp        
         String curp=request.getParameter("CURP");
         System.out.println("CURP del usuario:"+curp);
-        
-        //realizamos la consulta a la base de datos
-        DBConexion con=new DBConexion();      
-        con.conectar();
-        ResultSet resultados=con.consultar("select * from usuario where curp='"+curp+"';");
+        Matcher m = pC.matcher(curp);
+        if (!m.find( )) 
+        {
+            request.setAttribute("mensaje", "La CURP ingresada no es válida");
+            //Redireccionar con el mensaje de error
+            request.getRequestDispatcher("/WEB-INF/Registro.jsp").forward(request, response);
+        }
+        else
+        { 
+            //realizamos la consulta a la base de datos
+            DBConexion con=new DBConexion();      
+            con.conectar();
+            ResultSet resultados=con.consultar("select * from usuario where curp='"+curp+"';");
 
-        //conseguimos los datos y los mandamos al jsp    
-        if (resultados != null) {
-            try {
-                while (resultados.next()) {
-                    response.setContentType("text/html");
-                    request.setAttribute("Nombre",resultados.getString("Nombre"));
-                    request.setAttribute("Apellido_Paterno",resultados.getString("Apellido_Paterno"));
-                    request.setAttribute("Apellido_Materno",resultados.getString("Apellido_Materno"));
-                    request.setAttribute("CURP",resultados.getString("CURP"));
-                    request.setAttribute("Fecha_Nacimiento",resultados.getString("Fecha_Nacimiento"));
-                    request.setAttribute("Correo",resultados.getString("Correo"));
-                    request.setAttribute("Sexo_idSexo",resultados.getBigDecimal("Sexo_idSexo"));
-                    request.getRequestDispatcher("Resultado.jsp").forward(request, response);
-                    }
-                } catch (SQLException e) {
-                  e.printStackTrace();
+            //conseguimos los datos y los mandamos al jsp    
+            if (resultados != null) {
+                try {
+                    while (resultados.next()) {
+                        response.setContentType("text/html");
+                        request.setAttribute("Nombre",resultados.getString("Nombre"));
+                        request.setAttribute("Apellido_Paterno",resultados.getString("Apellido_Paterno"));
+                        request.setAttribute("Apellido_Materno",resultados.getString("Apellido_Materno"));
+                        request.setAttribute("CURP",resultados.getString("CURP"));
+                        request.setAttribute("Fecha_Nacimiento",resultados.getString("Fecha_Nacimiento"));
+                        request.setAttribute("Correo",resultados.getString("Correo"));
+                        request.setAttribute("Sexo_idSexo",resultados.getBigDecimal("Sexo_idSexo"));
+                        request.getRequestDispatcher("Resultado.jsp").forward(request, response);
+                        }
+                    } catch (SQLException e) {
+                      e.printStackTrace();
+                }
+                
             }
-            
+            else{
+                System.out.println("Sin resultados");          
+            }
+            request.getRequestDispatcher("Consulta.jsp").forward(request, response);
         }
-        else{
-            System.out.println("Sin resultados");          
-        }
-        request.getRequestDispatcher("Consulta.jsp").forward(request, response);
     }
 
     /**
