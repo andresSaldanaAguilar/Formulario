@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,13 +28,14 @@ import javax.servlet.http.HttpServletResponse;
 public class RegistroServlet extends HttpServlet {
 
     private static final String C =
-        "ˆ[A-Z]{1}[AEIOU]{1}]A-Z]{2}[0-9]{2}(0[1-9]—1[0-2])" 
-        + "(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}"
-                + "(AS|BC|BS|CC|CS|CH|CL|CM|DFT|DG|G|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)"
-                + "[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$";
+            "[A-Z]{4}[0-9]{6}[H,M][A-Z]{5}[0-9]{2}" ;
+//        "ˆ[A-Z]{1}[AEIOU]{1}][A-Z]{2}[0-9]{2}(0[1-9]—1[0-2])" 
+//        + "(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}"
+//                + "(AS|BC|BS|CC|CS|CH|CL|CM|DFT|DF|DG|G|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)"
+//                + "[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$";
     
     private Pattern pC = Pattern.compile(C);
-    private static final String NOM = "[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2-48}";
+    private static final String NOM = "^([a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,50})$";
     private Pattern pNOM = Pattern.compile(NOM);
     private static final String EM = "^[_a-z0-9-]+(.[_a-z0-9-]+)@[a-z0-9-]+(.[a-z0-9]+)*(.[a-z]{2,4})$";
     private Pattern pEM = Pattern.compile(EM);
@@ -118,7 +121,6 @@ public class RegistroServlet extends HttpServlet {
         String f_nac=request.getParameter("f_nac");
         String email=request.getParameter("email");
         String idSexo=request.getParameter("idSexo");
-        CURP = request.getParameter("CURP");
         //Matchers para las regexes
         Matcher m_curp = pC.matcher(curp);
         Matcher m_nom = pNOM.matcher(nombre);
@@ -128,29 +130,146 @@ public class RegistroServlet extends HttpServlet {
         if (!m_curp.find( )) //Si no hay un match con el CURP
         {
             request.setAttribute("mensaje", "La CURP ingresada no es válida");
-            request.getRequestDispatcher("/WEB-INF/Registro.jsp").forward(request, response);
+            System.out.println("Error en CURP");
+            
+            //realizamos la consulta a la base de datos
+            DBConexion con=new DBConexion();      
+            con.conectar();
+            ResultSet resultados=con.consultar("select nombre from sexo;");
+
+            //conseguimos los datos del catalogo
+            if (resultados != null) {
+                try {
+                    int i=0;
+                    while (resultados.next()) {
+                    response.setContentType("text/html");
+                    request.setAttribute("Sexo"+i,resultados.getString("Nombre"));         
+                    i++;
+                    }
+                    request.setAttribute("Num_elementos",i);                       
+                    } catch (Exception e) {
+                      e.printStackTrace();
+                  }
+                request.getRequestDispatcher("Registro.jsp").forward(request, response);
+            }
+            else{
+                System.out.println("Sin resultados");
+            }
         }
         else if (!m_nom.find( )) //Si no hay un match con el nombre
         {
             request.setAttribute("mensaje", "El nombre ingresado no es válido");
-            request.getRequestDispatcher("/WEB-INF/Registro.jsp").forward(request, response);
+            System.out.println("Error en nombre");
+            //realizamos la consulta a la base de datos
+            DBConexion con=new DBConexion();      
+            con.conectar();
+            ResultSet resultados=con.consultar("select nombre from sexo;");
+
+            //conseguimos los datos del catalogo
+            if (resultados != null) {
+                try {
+                    int i=0;
+                    while (resultados.next()) {
+                    response.setContentType("text/html");
+                    request.setAttribute("Sexo"+i,resultados.getString("Nombre"));         
+                    i++;
+                    }
+                    request.setAttribute("Num_elementos",i);                       
+                    } catch (Exception e) {
+                      e.printStackTrace();
+                  }
+                request.getRequestDispatcher("Registro.jsp").forward(request, response);
+            }
+            else{
+                System.out.println("Sin resultados");
+            }
         }
         else if (!m_ap.find( ))//Si no hay un match con el apellido paterno
         {
             request.setAttribute("mensaje", "El apellido paterno ingresado no es válido");
-            request.getRequestDispatcher("/WEB-INF/Registro.jsp").forward(request, response);
+            System.out.println("Error en apellido paterno");
+            //realizamos la consulta a la base de datos
+            DBConexion con=new DBConexion();      
+            con.conectar();
+            ResultSet resultados=con.consultar("select nombre from sexo;");
+
+            //conseguimos los datos del catalogo
+            if (resultados != null) {
+                try {
+                    int i=0;
+                    while (resultados.next()) {
+                    response.setContentType("text/html");
+                    request.setAttribute("Sexo"+i,resultados.getString("Nombre"));         
+                    i++;
+                    }
+                    request.setAttribute("Num_elementos",i);                       
+                    } catch (Exception e) {
+                      e.printStackTrace();
+                  }
+                request.getRequestDispatcher("Registro.jsp").forward(request, response);
+            }
+            else{
+                System.out.println("Sin resultados");
+            }
         }
         else if (!m_am.find( )) //Si no hay un match con el apellido materno
         {
             request.setAttribute("mensaje", "El apellido materno ingresado no es válido");
-            request.getRequestDispatcher("/WEB-INF/Registro.jsp").forward(request, response);
+            System.out.println("Error en apellido materno");
+            //realizamos la consulta a la base de datos
+            DBConexion con=new DBConexion();      
+            con.conectar();
+            ResultSet resultados=con.consultar("select nombre from sexo;");
+
+            //conseguimos los datos del catalogo
+            if (resultados != null) {
+                try {
+                    int i=0;
+                    while (resultados.next()) {
+                    response.setContentType("text/html");
+                    request.setAttribute("Sexo"+i,resultados.getString("Nombre"));         
+                    i++;
+                    }
+                    request.setAttribute("Num_elementos",i);                       
+                    } catch (Exception e) {
+                      e.printStackTrace();
+                  }
+                request.getRequestDispatcher("Registro.jsp").forward(request, response);
+            }
+            else{
+                System.out.println("Sin resultados");
+            }        
         }
         else if (!m_email.find( )) //Si no hay un match con el email
         {
             request.setAttribute("mensaje", "El email ingresado no es válido");
-            request.getRequestDispatcher("/WEB-INF/Registro.jsp").forward(request, response);
+            System.out.println("Error en el mail");
+            //realizamos la consulta a la base de datos
+            DBConexion con=new DBConexion();      
+            con.conectar();
+            ResultSet resultados=con.consultar("select nombre from sexo;");
+
+            //conseguimos los datos del catalogo
+            if (resultados != null) {
+                try {
+                    int i=0;
+                    while (resultados.next()) {
+                    response.setContentType("text/html");
+                    request.setAttribute("Sexo"+i,resultados.getString("Nombre"));         
+                    i++;
+                    }
+                    request.setAttribute("Num_elementos",i);                       
+                    } catch (Exception e) {
+                      e.printStackTrace();
+                  }
+                request.getRequestDispatcher("Registro.jsp").forward(request, response);
+            }
+            else{
+                System.out.println("Sin resultados");
+            }
         }
-        else //Si todo sale bien
+        //Si todo sale bien
+        else 
         {
             //realizamos la consulta a la base de datos
             DBConexion con=new DBConexion();      
@@ -159,12 +278,47 @@ public class RegistroServlet extends HttpServlet {
             boolean resultados=con.ejecutar("insert into usuario values"
                     + "('"+nombre+"','"+apaterno+"','"+amaterno+"','"+curp+"',"
                     + "'"+f_nac+"','"+email+"','"+Integer.parseInt(idSexo)+"');");
+            
+            //La trayectoria principal :D
             if(resultados==true){
                 System.out.println("Registro Exitoso.");
-                request.getRequestDispatcher("index.jsp").forward(request, response);
-            }else{
-                System.out.println("No se pudo registrar.");
+                //Redireccionar con el mensaje de error
+                request.setAttribute("mensajeEXITO", "Registro exitoso!");
                 request.getRequestDispatcher("Registro.jsp").forward(request, response);
+            }
+            //El registro ya existe en la base de datos
+            else{
+                
+                System.out.println("No se pudo registrar.");
+             
+                //realizamos la consulta a la base de datos
+                DBConexion con2=new DBConexion();      
+                con2.conectar();
+                ResultSet resultados2=con2.consultar("select nombre from sexo;");
+
+                //conseguimos los datos del catalogo
+                if (resultados2 != null) {
+                    try {
+                        int i=0;
+                        while (resultados2.next()) {
+                        response.setContentType("text/html");
+                        request.setAttribute("Sexo"+i,resultados2.getString("Nombre"));         
+                        i++;
+                        }
+                        request.setAttribute("Num_elementos",i);                       
+                        } catch (Exception e) {
+                          e.printStackTrace();
+                      }
+                    request.setAttribute("mensajeDUP", "El CURP ingresado ya ha sido registrado.");
+                    //Redireccionar con el mensaje de error
+                    request.getRequestDispatcher("Registro.jsp").forward(request, response);
+                }
+                else{
+                    System.out.println("Sin resultados");
+                    request.setAttribute("mensajeERRBD", "Error en la conexion de base de datos.");
+                    //Redireccionar con el mensaje de error
+                    request.getRequestDispatcher("Registro.jsp").forward(request, response);
+                }
             }
         }
     }

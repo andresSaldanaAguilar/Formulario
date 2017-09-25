@@ -29,14 +29,37 @@
         <div class="panel-body">
             <form action="ConsultaServlet" method="post">
                 <div class="form-group">
-                    <input type="text" class="form-control" id="CURP" name="CURP" placeholder="CURP" required>
+                    <input type="text" class="form-control" id="CURP" name="CURP" placeholder="CURP" required minlength="18" maxlength="18">
                 </div>
                 <button type="submit" class="btn  btn-primary col-md-offset-4 col-md-4 ">Consultar</button>
             </form>
         </div>
     </div>
     <br>
-        <a class="btn  btn-danger col-md-2" href="index.jsp">Regresar</a>
+        <a class="btn  btn-danger col-md-2 col-lg-offset-10" href="index.jsp">Regresar</a>
+        
+
+    <!--mensajes de acuerdo al problema de consulta-->    
+<%     
+    //CURP invalida
+    if((String) request.getAttribute("mensajeCURP")!=null)
+{
+   out.println("<script type=\"text/javascript\">");
+   out.println("alert('LA CURP ingresada no es válida.');");
+   out.println("location='Consulta.jsp';");
+   out.println("</script>");
+}
+    //CURP no existente
+    else if((String) request.getAttribute("mensajeSINRES")!=null)
+{
+   out.println("<script type=\"text/javascript\">");
+   out.println("alert('Registro no encontrado o inexistente.');");
+   out.println("location='Consulta.jsp';");
+   out.println("</script>");
+} 
+%>
+
+        
 </div>
 </body>
 </html>

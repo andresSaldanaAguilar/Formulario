@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -36,10 +38,11 @@ public class ConsultaServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private static final String C =
-        "ˆ[A-Z]{1}[AEIOU]{1}]A-Z]{2}[0-9]{2}(0[1-9]—1[0-2])" 
-        + "(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}"
-                + "(AS|BC|BS|CC|CS|CH|CL|CM|DFT|DG|G|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)"
-                + "[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$";
+          "[A-Z]{4}[0-9]{6}[H,M][A-Z]{5}[0-9]{2}";
+//        "ˆ[A-Z]{1}[AEIOU]{1}]A-Z]{2}[0-9]{2}(0[1-9]—1[0-2])" 
+//        + "(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}"
+//                + "(AS|BC|BS|CC|CS|CH|CL|CM|DFT|DG|G|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)"
+//                + "[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$";
     private Pattern pC = Pattern.compile(C);
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -92,11 +95,13 @@ public class ConsultaServlet extends HttpServlet {
         String curp=request.getParameter("CURP");
         System.out.println("CURP del usuario:"+curp);
         Matcher m = pC.matcher(curp);
+        
+        //Redireccionar con el mensaje de error si esta mal el formato de CURP
         if (!m.find( )) 
         {
-            request.setAttribute("mensaje", "La CURP ingresada no es válida");
-            //Redireccionar con el mensaje de error
-            request.getRequestDispatcher("/WEB-INF/Registro.jsp").forward(request, response);
+            System.out.println("CURP no válida.");
+            request.setAttribute("mensajeCURP", "La CURP ingresada no es válida");
+            request.getRequestDispatcher("Consulta.jsp").forward(request, response);
         }
         else
         { 
@@ -121,12 +126,17 @@ public class ConsultaServlet extends HttpServlet {
                         }
                     } catch (SQLException e) {
                       e.printStackTrace();
+                      
                 }
                 
             }
             else{
                 System.out.println("Sin resultados");          
             }
+            //caso en que la curp no sea valida
+            System.out.println("CURP no válida.");
+            request.setAttribute("mensajeSINRES", "Registro no encontrado o inexistente.");
+            //Redireccionar con el mensaje de error
             request.getRequestDispatcher("Consulta.jsp").forward(request, response);
         }
     }
