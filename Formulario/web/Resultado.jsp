@@ -8,10 +8,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Resultado encontrado</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="Resources/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <link rel="stylesheet" href="Resources/Styles.css"> 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="Resources/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -23,7 +25,8 @@
     <div class="panel panel-default">
         <div class="panel-heading">
                 <legend><h1>Datos obtenidos</h1></legend>
-                <h4>Usuario registrado con la CURP: <%=(String)request.getAttribute("CURP")%></h4>
+                <h4>Usuario registrado con la CURP:</h4>
+                <text style="color:#3D77E3"><%=(String)request.getAttribute("CURP")%></text>
         </div>
         <div class="panel-body">
             <p><label>Nombre(s):</label><text> <%=(String)request.getAttribute("Nombre")%></text></p>
