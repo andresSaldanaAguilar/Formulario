@@ -47,7 +47,7 @@
     if((String) request.getAttribute("mensajeCURP")!=null)
 {
    out.println("<script type=\"text/javascript\">");
-   out.println("alert('LA CURP ingresada no es válida.');");
+   out.println("alert('La CURP que ingresaste no es válida. Por favor verifica la CURP e intentalo nuevamente.');");
    out.println("location='Consulta.jsp';");
    out.println("</script>");
 }
@@ -55,7 +55,7 @@
     else if((String) request.getAttribute("mensajeSINRES")!=null)
 {
    out.println("<script type=\"text/javascript\">");
-   out.println("alert('Registro no encontrado o inexistente.');");
+   out.println("alert('El usuario que buscas no se encuentra registrado.');");
    out.println("location='Consulta.jsp';");
    out.println("</script>");
 } 

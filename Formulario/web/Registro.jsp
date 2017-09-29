@@ -67,23 +67,22 @@
     if((String) request.getAttribute("mensajeDUP")!=null)
     {
        out.println("<script type=\"text/javascript\">");
-       out.println("alert('El CURP ingresado ya ha sido registrado anteriormente.');");
-       
+       out.println("alert('El CURP ingresado ya ha sido registrado anteriormente.');"); 
        out.println("</script>");
     }
     //Error en la conexion de base de datos.
     if((String) request.getAttribute("mensajeERRBD")!=null)
     {
        out.println("<script type=\"text/javascript\">");
-       out.println("alert('Error en la conexion de base de datos.');");
-       //out.println("location='Registro.jsp';");
+       out.println("alert('Los datos no se han podido guardar, inténtelo más tarde, si el problema "
+               + "persiste comununiquese con el administrador.');");
        out.println("</script>");
     }
     //Registro exitoso!
     if((String) request.getAttribute("mensajeEXITO")!=null)
     {
        out.println("<script type=\"text/javascript\">");
-       out.println("alert('Registro exitoso!');");
+       out.println("alert('Los datos han sido guardados exitosamente!');");
        out.println("location='index.jsp';");
        out.println("</script>");
     }

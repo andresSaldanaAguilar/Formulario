@@ -43,8 +43,6 @@
         </div>    
     </div>
     <a class="btn  btn-danger col-md-offset-5 col-md-2" href="Consulta.jsp">Regresar</a>
-
-
     </div>
 </div>
 </body>
