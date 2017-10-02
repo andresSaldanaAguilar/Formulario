@@ -40,8 +40,8 @@ CREATE TABLE `sexo` (
 -- Volcado de datos para la tabla `sexo`
 --
 
+INSERT DELAYED IGNORE INTO `sexo` (`idSexo`, `Nombre`) VALUES(0, 'Masculino');
 INSERT DELAYED IGNORE INTO `sexo` (`idSexo`, `Nombre`) VALUES(1, 'Femenino');
-INSERT DELAYED IGNORE INTO `sexo` (`idSexo`, `Nombre`) VALUES(2, 'Masculino');
 
 -- --------------------------------------------------------
 
@@ -77,6 +77,9 @@ ALTER TABLE `usuario`
   ADD PRIMARY KEY (`CURP`),
   ADD KEY `Sexo_idSexo` (`Sexo_idSexo`);
 COMMIT;
+
+--
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
